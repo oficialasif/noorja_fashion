@@ -1,0 +1,43 @@
+# Database files
+database/schema.sql
+*.sql
+
+# Configuration files with sensitive data
+config/database.php
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# PHP session files
+sessions/
+
+# Upload directories
+uploads/
+images/
+
+# Cache files
+cache/
+*.cache
+
+# Backup files
+*.bak
+*.backup
