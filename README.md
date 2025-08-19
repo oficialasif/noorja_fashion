@@ -72,7 +72,7 @@ A professional, minimal, and elegant eCommerce website for selling women's fashi
 5. **Access the application**
    - Frontend: `http://your-domain.com`
    - Admin Panel: `http://your-domain.com/admin`
-   - Admin Login: `admin@noorja.com` / `admin123`
+   - Admin Login: Use the credentials from your database setup
 
 ## 📁 Project Structure
 
@@ -188,9 +188,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Asif Hossain**
+**Asif Mahmud**
 - GitHub: [@oficialasif](https://github.com/oficialasif)
-- Email: noorshoping@gmail.com
+- Email: asifmahmud802@gmail.com
 
 ## 🙏 Acknowledgments
 
@@ -203,7 +203,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For support and questions:
-- Email: noorshoping@gmail.com
+- Email: asifmahmud802@gmail.com
 - Phone: +880 1737 18****
 - Address: Rajshahi Mahanagar, Bangladesh
 
