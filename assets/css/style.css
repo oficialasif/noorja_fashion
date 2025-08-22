@@ -634,3 +634,128 @@ html {
     outline: 2px solid var(--golden-yellow);
     outline-offset: 2px;
 }
+
+/* Shop Page Styles */
+.filter-sidebar {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+
+.filter-group h6 {
+    color: var(--primary-green);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Poppins', sans-serif;
+    border-bottom: 2px solid var(--soft-beige);
+    padding-bottom: 0.5rem;
+}
+
+.category-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.category-filters a {
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+.category-filter {
+    display: block !important;
+    padding: 0.75rem 1rem !important;
+    color: var(--neutral-dark) !important;
+    text-decoration: none !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    border: 1px solid transparent !important;
+    margin-bottom: 0.25rem !important;
+    background-color: transparent !important;
+}
+
+.category-filter:hover {
+    background-color: var(--soft-beige) !important;
+    color: var(--primary-green) !important;
+    text-decoration: none !important;
+    transform: translateX(5px) !important;
+}
+
+.category-filter.active {
+    background-color: var(--primary-green) !important;
+    color: var(--white) !important;
+    font-weight: 600 !important;
+}
+
+.category-filter.active:hover {
+    background-color: var(--primary-green) !important;
+    color: var(--white) !important;
+    transform: none !important;
+}
+
+/* Product Title Styles */
+.product-title a {
+    color: var(--primary-green);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.product-title a:hover {
+    color: var(--golden-yellow);
+    text-decoration: none;
+}
+
+/* Price Range Filter */
+.price-range {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.price-range .form-check {
+    margin-bottom: 0.5rem;
+}
+
+.price-range .form-check-label {
+    font-size: 0.9rem;
+    color: var(--neutral-dark);
+    cursor: pointer;
+}
+
+.price-range .form-check-input:checked + .form-check-label {
+    color: var(--primary-green);
+    font-weight: 600;
+}
+
+/* Filter Toggle for Mobile */
+.filter-toggle {
+    display: none;
+}
+
+@media (max-width: 991px) {
+    .filter-toggle {
+        display: block;
+    }
+    
+    .filter-sidebar {
+        display: none;
+    }
+    
+    .filter-sidebar.show {
+        display: block;
+    }
+}

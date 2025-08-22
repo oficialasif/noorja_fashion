@@ -10,11 +10,59 @@ if (!isLoggedIn()) {
 }
 
 $user_id = $_SESSION['user_id'];
-$action = $_POST['action'] ?? '';
+
+// Get JSON input
+$input = json_decode(file_get_contents('php://input'), true);
+$action = $input['action'] ?? '';
 
 switch ($action) {
+    case 'toggle':
+        $product_id = (int)($input['product_id'] ?? 0);
+        
+        if ($product_id <= 0) {
+            echo json_encode(['success' => false, 'message' => 'Invalid product']);
+            exit;
+        }
+        
+        // Check if product exists and is active
+        $product = getProductById($conn, $product_id);
+        if (!$product || $product['status'] !== 'active') {
+            echo json_encode(['success' => false, 'message' => 'Product not available']);
+            exit;
+        }
+        
+        // Check if already in wishlist
+        $in_wishlist = isInWishlist($conn, $user_id, $product_id);
+        
+        if ($in_wishlist) {
+            // Remove from wishlist
+            $result = removeFromWishlist($conn, $user_id, $product_id);
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Product removed from wishlist',
+                    'in_wishlist' => false
+                ]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Failed to remove product from wishlist']);
+            }
+        } else {
+            // Add to wishlist
+            $result = addToWishlist($conn, $user_id, $product_id);
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Product added to wishlist successfully',
+                    'in_wishlist' => true
+                ]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Failed to add product to wishlist']);
+            }
+        }
+        break;
+        
     case 'add':
-        $product_id = (int)($_POST['product_id'] ?? 0);
+        $product_id = (int)($input['product_id'] ?? 0);
         
         if ($product_id <= 0) {
             echo json_encode(['success' => false, 'message' => 'Invalid product']);
@@ -48,7 +96,7 @@ switch ($action) {
         break;
         
     case 'remove':
-        $product_id = (int)($_POST['product_id'] ?? 0);
+        $product_id = (int)($input['product_id'] ?? 0);
         
         if ($product_id <= 0) {
             echo json_encode(['success' => false, 'message' => 'Invalid product']);
@@ -79,7 +127,7 @@ switch ($action) {
         break;
         
     case 'check_wishlist':
-        $product_id = (int)($_POST['product_id'] ?? 0);
+        $product_id = (int)($input['product_id'] ?? 0);
         
         if ($product_id <= 0) {
             echo json_encode(['success' => false, 'message' => 'Invalid product']);

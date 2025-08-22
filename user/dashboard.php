@@ -32,8 +32,8 @@ $wishlist_count = count($wishlist_items);
 $stmt = $conn->prepare("SELECT 
     COUNT(*) as total_orders,
     SUM(total_amount) as total_spent,
-    COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending_orders,
-    COUNT(CASE WHEN status = 'delivered' THEN 1 END) as delivered_orders
+    COUNT(CASE WHEN order_status = 'pending' THEN 1 END) as pending_orders,
+    COUNT(CASE WHEN order_status = 'delivered' THEN 1 END) as delivered_orders
     FROM orders WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $order_stats = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -258,11 +258,11 @@ $order_stats = $stmt->fetch(PDO::FETCH_ASSOC);
                                                     <td>#<?php echo $order['order_number']; ?></td>
                                                     <td><?php echo date('M d, Y', strtotime($order['created_at'])); ?></td>
                                                     <td>৳<?php echo number_format($order['total_amount']); ?></td>
-                                                    <td>
-                                                        <span class="badge bg-<?php echo getStatusColor($order['status']); ?>">
-                                                            <?php echo ucfirst($order['status']); ?>
-                                                        </span>
-                                                    </td>
+                                                                                                         <td>
+                                                         <span class="badge bg-<?php echo getOrderStatusBadge($order['order_status']); ?>">
+                                                             <?php echo ucfirst($order['order_status']); ?>
+                                                         </span>
+                                                     </td>
                                                     <td>
                                                         <a href="order-details.php?id=<?php echo $order['id']; ?>" class="btn btn-sm btn-outline-primary">
                                                             View Details

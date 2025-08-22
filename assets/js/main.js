@@ -221,6 +221,8 @@ function toggleWishlist(productId, button) {
         return;
     }
 
+    console.log('Toggling wishlist for product:', productId);
+
     fetch('ajax/wishlist.php', {
         method: 'POST',
         headers: {
@@ -231,8 +233,15 @@ function toggleWishlist(productId, button) {
             product_id: productId
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Wishlist response status:', response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
+        console.log('Wishlist response data:', data);
         if (data.success) {
             const icon = button.querySelector('i');
             if (data.in_wishlist) {
@@ -247,8 +256,8 @@ function toggleWishlist(productId, button) {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        showNotification('Error updating wishlist', 'error');
+        console.error('Wishlist error:', error);
+        showNotification('Error updating wishlist: ' + error.message, 'error');
     });
 }
 

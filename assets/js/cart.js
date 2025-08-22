@@ -89,8 +89,15 @@ function addToCart(productId, quantity = 1, button = null) {
             quantity: quantity
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Cart response status:', response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
+        console.log('Cart response data:', data);
         if (data.success) {
             showNotification('Product added to cart successfully!', 'success');
             updateCartCount(data.cart_count);
@@ -105,8 +112,8 @@ function addToCart(productId, quantity = 1, button = null) {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        showNotification('Error adding product to cart', 'error');
+        console.error('Cart error:', error);
+        showNotification('Error adding product to cart: ' + error.message, 'error');
     })
     .finally(() => {
         // Restore button state
@@ -257,16 +264,49 @@ function updateCartDisplay(data) {
     }
 }
 
-// Update cart count in header
+// Update cart count in header and sidebar
 function updateCartCount(count) {
-    const cartBadge = document.querySelector('.cart-badge');
-    if (cartBadge) {
+    // Update cart badge in header
+    const headerCartBadge = document.querySelector('.navbar-nav .nav-link[href*="cart.php"] .badge');
+    
+    if (headerCartBadge) {
         if (count > 0) {
-            cartBadge.textContent = count;
-            cartBadge.style.display = 'block';
+            headerCartBadge.textContent = count;
+            headerCartBadge.style.display = 'block';
         } else {
-            cartBadge.style.display = 'none';
+            headerCartBadge.style.display = 'none';
         }
+    } else if (count > 0) {
+        // If badge doesn't exist but count > 0, create it
+        const cartLink = document.querySelector('.navbar-nav .nav-link[href*="cart.php"]');
+        if (cartLink) {
+            const newBadge = document.createElement('span');
+            newBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary';
+            newBadge.textContent = count;
+            cartLink.appendChild(newBadge);
+        }
+    }
+    
+    // Update cart badge in user dashboard sidebar (all user pages)
+    const sidebarCartBadges = document.querySelectorAll('.dashboard-nav .nav-link[href*="cart.php"] .badge');
+    sidebarCartBadges.forEach(badge => {
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+        }
+    });
+    
+    // If no sidebar badges exist but count > 0, create them
+    if (count > 0 && sidebarCartBadges.length === 0) {
+        const sidebarCartLinks = document.querySelectorAll('.dashboard-nav .nav-link[href*="cart.php"]');
+        sidebarCartLinks.forEach(link => {
+            const newBadge = document.createElement('span');
+            newBadge.className = 'badge bg-primary ms-2';
+            newBadge.textContent = count;
+            link.appendChild(newBadge);
+        });
     }
 }
 

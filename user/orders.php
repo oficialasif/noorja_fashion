@@ -25,7 +25,7 @@ $where_conditions = ["user_id = ?"];
 $params = [$user_id];
 
 if (!empty($status_filter)) {
-    $where_conditions[] = "status = ?";
+    $where_conditions[] = "order_status = ?";
     $params[] = $status_filter;
 }
 
@@ -39,10 +39,10 @@ $total_orders = $count_stmt->fetchColumn();
 $pagination = getPaginationInfo($total_orders, $page, 10);
 
 // Get orders
-$stmt = $conn->prepare("SELECT * FROM orders WHERE $where_clause ORDER BY created_at DESC LIMIT :limit OFFSET :offset");
-$stmt->bindParam(':limit', $pagination['items_per_page'], PDO::PARAM_INT);
-$stmt->bindParam(':offset', $pagination['offset'], PDO::PARAM_INT);
-$stmt->execute();
+$stmt = $conn->prepare("SELECT * FROM orders WHERE $where_clause ORDER BY created_at DESC LIMIT ? OFFSET ?");
+$stmt->bindParam(1, $pagination['items_per_page'], PDO::PARAM_INT);
+$stmt->bindParam(2, $pagination['offset'], PDO::PARAM_INT);
+$stmt->execute($params);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Get cart items count
@@ -224,8 +224,8 @@ $wishlist_count = count($wishlist_items);
                                                 <strong>৳<?php echo number_format($order['total_amount']); ?></strong>
                                             </td>
                                             <td>
-                                                <span class="badge bg-<?php echo getStatusColor($order['status']); ?>">
-                                                    <?php echo ucfirst($order['status']); ?>
+                                                <span class="badge bg-<?php echo getOrderStatusBadge($order['order_status']); ?>">
+                                                    <?php echo ucfirst($order['order_status']); ?>
                                                 </span>
                                             </td>
                                             <td>

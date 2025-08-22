@@ -24,6 +24,15 @@ $current_category = null;
 if ($category_id) {
     $current_category = getCategoryById($conn, $category_id);
 }
+
+// Get user's wishlist items if logged in
+$user_wishlist = [];
+if (isLoggedIn()) {
+    $wishlist_items = getWishlistItems($conn, $_SESSION['user_id']);
+    foreach ($wishlist_items as $item) {
+        $user_wishlist[] = $item['product_id'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -232,11 +241,17 @@ if ($category_id) {
                                     </div>
                                     
                                     <div class="product-actions">
+                                        <?php if ($product['stock'] > 0): ?>
                                         <button class="btn btn-sm btn-primary add-to-cart" data-product-id="<?php echo $product['id']; ?>">
                                             <i class="fas fa-shopping-cart"></i> Add to Cart
                                         </button>
+                                        <?php else: ?>
+                                        <button class="btn btn-sm btn-secondary" disabled>
+                                            <i class="fas fa-shopping-cart"></i> Out of Stock
+                                        </button>
+                                        <?php endif; ?>
                                         <button class="btn btn-sm btn-outline-primary wishlist-toggle" data-product-id="<?php echo $product['id']; ?>">
-                                            <i class="far fa-heart"></i>
+                                            <i class="<?php echo in_array($product['id'], $user_wishlist) ? 'fas fa-heart text-danger' : 'far fa-heart'; ?>"></i>
                                         </button>
                                     </div>
                                     
@@ -300,5 +315,19 @@ if ($category_id) {
     <!-- Custom JS -->
     <script src="assets/js/main.js"></script>
     <script src="assets/js/cart.js"></script>
+    
+    <script>
+        // Mobile filter toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterToggle = document.querySelector('.filter-toggle');
+            const filterSidebar = document.querySelector('.filter-sidebar');
+            
+            if (filterToggle && filterSidebar) {
+                filterToggle.addEventListener('click', function() {
+                    filterSidebar.classList.toggle('show');
+                });
+            }
+        });
+    </script>
 </body>
 </html>

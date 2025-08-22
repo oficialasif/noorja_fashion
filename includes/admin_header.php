@@ -214,7 +214,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../auth.php?logout=1">
+                    <a class="nav-link" href="../auth.php?logout">
                         <i class="fas fa-sign-out-alt"></i>
                         Logout
                     </a>

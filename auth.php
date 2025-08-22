@@ -31,9 +31,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 setFlashMessage('success', 'Welcome back, ' . $user['name'] . '!');
                 
                 // Redirect to intended page or dashboard
-                $redirect_url = $_SESSION['redirect_url'] ?? 'index.php';
+                $redirect_url = $_SESSION['redirect_url'] ?? '';
                 unset($_SESSION['redirect_url']);
-                redirect($redirect_url);
+                
+                if ($redirect_url) {
+                    redirect($redirect_url);
+                } else {
+                    // Redirect based on user role
+                    if ($user['role'] === 'admin') {
+                        redirect('admin/index.php');
+                    } else {
+                        redirect('user/dashboard.php');
+                    }
+                }
             } else {
                 setFlashMessage('error', 'Invalid email or password');
             }

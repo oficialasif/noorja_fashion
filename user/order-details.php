@@ -50,8 +50,8 @@ $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <td><strong>Status:</strong></td>
                 <td>
-                    <span class="badge bg-<?php echo getStatusColor($order['status']); ?>">
-                        <?php echo ucfirst($order['status']); ?>
+                    <span class="badge bg-<?php echo getOrderStatusBadge($order['order_status']); ?>">
+                        <?php echo ucfirst($order['order_status']); ?>
                     </span>
                 </td>
             </tr>
@@ -114,24 +114,6 @@ $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-md-6 offset-md-6">
         <h6>Order Summary</h6>
         <table class="table table-sm">
-            <tr>
-                <td><strong>Subtotal:</strong></td>
-                                            <td class="text-end">৳<?php echo number_format($order['subtotal']); ?></td>
-            </tr>
-            <tr>
-                <td><strong>Shipping:</strong></td>
-                                            <td class="text-end">৳<?php echo number_format($order['shipping_cost']); ?></td>
-            </tr>
-            <tr>
-                <td><strong>Tax:</strong></td>
-                                            <td class="text-end">৳<?php echo number_format($order['tax_amount']); ?></td>
-            </tr>
-            <?php if ($order['discount_amount'] > 0): ?>
-            <tr>
-                <td><strong>Discount:</strong></td>
-                                            <td class="text-end text-danger">-৳<?php echo number_format($order['discount_amount']); ?></td>
-            </tr>
-            <?php endif; ?>
             <tr class="table-active">
                 <td><strong>Total:</strong></td>
                 <td class="text-end"><strong>৳<?php echo number_format($order['total_amount']); ?></strong></td>

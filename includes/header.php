@@ -1,4 +1,5 @@
 <?php
+global $conn;
 $cart_count = 0;
 if (isLoggedIn()) {
     $cart_items = getCartItems($conn, $_SESSION['user_id']);
@@ -7,12 +8,32 @@ if (isLoggedIn()) {
 
 // Get site settings
 $site_name = getSetting($conn, 'site_name', 'NOORJA');
+
+// Determine the current context (public, user, or admin)
+$current_path = $_SERVER['REQUEST_URI'] ?? '';
+$is_user_area = strpos($current_path, '/user/') !== false;
+$is_admin_area = strpos($current_path, '/admin/') !== false;
+
+// Set base paths based on context
+if ($is_user_area) {
+    $base_path = '../';
+    $user_base = '';
+    $admin_base = '../admin/';
+} elseif ($is_admin_area) {
+    $base_path = '../';
+    $user_base = '../user/';
+    $admin_base = '';
+} else {
+    $base_path = '';
+    $user_base = 'user/';
+    $admin_base = 'admin/';
+}
 ?>
 <header class="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <!-- Logo -->
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="<?php echo $base_path; ?>index.php">
                 <h1 class="brand-name"><?php echo htmlspecialchars($site_name); ?></h1>
             </a>
 
@@ -25,32 +46,32 @@ $site_name = getSetting($conn, 'site_name', 'NOORJA');
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
+                        <a class="nav-link" href="<?php echo $base_path; ?>index.php">Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             Shop
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="shop.php">All Products</a></li>
+                            <li><a class="dropdown-item" href="<?php echo $base_path; ?>shop.php">All Products</a></li>
                             <?php foreach (getCategories($conn) as $category): ?>
-                            <li><a class="dropdown-item" href="shop.php?category=<?php echo $category['id']; ?>"><?php echo $category['name']; ?></a></li>
+                            <li><a class="dropdown-item" href="<?php echo $base_path; ?>shop.php?category=<?php echo $category['id']; ?>"><?php echo $category['name']; ?></a></li>
                             <?php endforeach; ?>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="offers.php">Offers</a>
+                        <a class="nav-link" href="<?php echo $base_path; ?>offers.php">Offers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.php">About</a>
+                        <a class="nav-link" href="<?php echo $base_path; ?>about.php">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.php">Contact</a>
+                        <a class="nav-link" href="<?php echo $base_path; ?>contact.php">Contact</a>
                     </li>
                 </ul>
 
                 <!-- Search Bar -->
-                <form class="d-flex me-3" action="shop.php" method="GET">
+                <form class="d-flex me-3" action="<?php echo $base_path; ?>shop.php" method="GET">
                     <div class="input-group">
                         <input class="form-control" type="search" name="search" placeholder="Search products..." aria-label="Search">
                         <button class="btn btn-outline-primary" type="submit">
@@ -63,7 +84,7 @@ $site_name = getSetting($conn, 'site_name', 'NOORJA');
                 <ul class="navbar-nav">
                     <!-- Cart -->
                     <li class="nav-item">
-                        <a class="nav-link position-relative" href="cart.php">
+                        <a class="nav-link position-relative" href="<?php echo $base_path; ?>cart.php">
                             <i class="fas fa-shopping-cart"></i>
                             <?php if ($cart_count > 0): ?>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
@@ -81,21 +102,21 @@ $site_name = getSetting($conn, 'site_name', 'NOORJA');
                         </a>
                         <ul class="dropdown-menu">
                             <?php if (isAdmin()): ?>
-                            <li><a class="dropdown-item" href="admin/index.php">Admin Dashboard</a></li>
+                            <li><a class="dropdown-item" href="<?php echo $admin_base; ?>index.php">Admin Dashboard</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <?php endif; ?>
-                            <li><a class="dropdown-item" href="user/dashboard.php">Dashboard</a></li>
-                            <li><a class="dropdown-item" href="user/profile.php">My Profile</a></li>
-                            <li><a class="dropdown-item" href="user/orders.php">My Orders</a></li>
-                            <li><a class="dropdown-item" href="user/wishlist.php">Wishlist</a></li>
+                            <li><a class="dropdown-item" href="<?php echo $user_base; ?>dashboard.php">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="<?php echo $user_base; ?>profile.php">My Profile</a></li>
+                            <li><a class="dropdown-item" href="<?php echo $user_base; ?>orders.php">My Orders</a></li>
+                            <li><a class="dropdown-item" href="<?php echo $user_base; ?>wishlist.php">Wishlist</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="auth.php?action=logout">Logout</a></li>
+                            <li><a class="dropdown-item" href="<?php echo $base_path; ?>auth.php?action=logout">Logout</a></li>
                         </ul>
                     </li>
                     <?php else: ?>
                     <!-- Login/Register -->
                     <li class="nav-item">
-                        <a class="nav-link" href="auth.php">Login / Register</a>
+                        <a class="nav-link" href="<?php echo $base_path; ?>auth.php">Login / Register</a>
                     </li>
                     <?php endif; ?>
                 </ul>

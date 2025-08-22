@@ -14,7 +14,7 @@ $contact_address = getSetting($conn, 'contact_address', '123 Fashion Street, Mum
                 <h3 class="brand-name mb-3"><?php echo htmlspecialchars($site_name); ?></h3>
                 <p class="mb-3"><?php echo htmlspecialchars($site_description); ?></p>
                 <div class="social-links">
-                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="https://web.facebook.com/Itsnoorja" class="social-link"><i class="fab fa-facebook"></i></a>
                     <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
                     <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
                     <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>

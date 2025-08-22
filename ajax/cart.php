@@ -10,12 +10,15 @@ if (!isLoggedIn()) {
 }
 
 $user_id = $_SESSION['user_id'];
-$action = $_POST['action'] ?? '';
+
+// Get JSON input
+$input = json_decode(file_get_contents('php://input'), true);
+$action = $input['action'] ?? '';
 
 switch ($action) {
     case 'add':
-        $product_id = (int)($_POST['product_id'] ?? 0);
-        $quantity = (int)($_POST['quantity'] ?? 1);
+        $product_id = (int)($input['product_id'] ?? 0);
+        $quantity = (int)($input['quantity'] ?? 1);
         
         if ($product_id <= 0) {
             echo json_encode(['success' => false, 'message' => 'Invalid product']);
@@ -55,8 +58,8 @@ switch ($action) {
         break;
         
     case 'update':
-        $cart_id = (int)($_POST['cart_id'] ?? 0);
-        $quantity = (int)($_POST['quantity'] ?? 1);
+        $cart_id = (int)($input['cart_id'] ?? 0);
+        $quantity = (int)($input['quantity'] ?? 1);
         
         if ($cart_id <= 0 || $quantity <= 0) {
             echo json_encode(['success' => false, 'message' => 'Invalid parameters']);
@@ -99,7 +102,7 @@ switch ($action) {
         break;
         
     case 'remove':
-        $cart_id = (int)($_POST['cart_id'] ?? 0);
+        $cart_id = (int)($input['cart_id'] ?? 0);
         
         if ($cart_id <= 0) {
             echo json_encode(['success' => false, 'message' => 'Invalid cart item']);
